@@ -30,21 +30,24 @@ searchBtn.addEventListener("click", () => {
 
             const events = data.data.Events;
 
-            if (events.length === 0) {
-                result.innerHTML = `<p>Nema događaja za taj datum</p>`;
-                return;
-            }
-
             // filtrira samo događaje za unesenu godinu
             const filtered = events.filter(e =>
-                e.text.startsWith(year)
+                e.text.includes(year)
             );
 
             if (filtered.length === 0) {
-                result.innerHTML = `<p>Nema događaja za godinu ${year}</p>`;
-                return;
-            }
-
+                fetch(`http://localhost:4000/apiAI?month=${month}&day=${day}&year=${year}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    console.log(JSON.stringify(data));
+                    result.innerHTML = `<p>${data.choices[0].message.content}</p>`;
+            })
+            .catch(err => {
+                console.log(err);
+                result.innerHTML = `<p>Greška pri učitavanju</p>`;
+            });
+            } else {
             filtered.forEach(e => {
                 result.innerHTML += `
                     <div class="event">
@@ -52,6 +55,7 @@ searchBtn.addEventListener("click", () => {
                     </div>
                 `;
             });
+        }
         })
         .catch(err => {
             console.log(err);
@@ -84,10 +88,12 @@ randomBtn.addEventListener("click", () => {
 
             const randomEvent =
                 events[Math.floor(Math.random() * events.length)];
-
+                const arrYr = randomEvent.text.match(/^\d+/);
+                console.log(arrYr);
+                const ranYr = arrYr ? arrYr[0] : "";
             result.innerHTML = `
                 <div class="event">
-                    <h3>Random događaj</h3>
+                    <h3>Random događaj na dan ${randomDay}.${randomMonth}.${ranYr}</h3>
                     <p>${randomEvent.text}</p>
                 </div>
             `;
