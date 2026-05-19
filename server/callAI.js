@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 require('dotenv').config({path: '../.env'});
 const APIKljuc = process.env.GROQ_API_KEY;
-console.log(APIKljuc);
 app.use((req, res, next) =>{
     res.header("Access-Control-Allow-Origin", "*");
     next();
@@ -18,16 +17,17 @@ async function dobijPodatke(req, res){
                 'Authorization': `Bearer ${APIKljuc}`
             },
             body: JSON.stringify({
-                model: 'llama-3.1-8b-instant',
+                model: 'llama-3.3-70b-versatile',
                 messages: [{
                     role: 'user',
-                    content: `Fetch from wikipedia what significant happened on ${day}.${month}.${year}.
-                    Please don't add any of your tex but just what's written in the article.`
+                    content: `What significant historical event happened on ${day}.${month}.${year}?
+If you know of any event, describe it briefly and factually.
+If you truly have no information about this specific date, respond only with: "No data found for entered date".
+Do not make up events.(Date format is dd-mm-yyyy)(behave like a bot don't give answers that sound personal)`
                 }]
             })
         });
         const data = await response.json();
-        console.log(JSON.stringify(data, null, 2));
         res.json(data);
     }catch(err){
         res.status(500).json({error: err.message});

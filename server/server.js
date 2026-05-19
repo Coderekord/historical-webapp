@@ -12,7 +12,6 @@ app.get('/api', async(req, res) =>{
             `https://today.zenquotes.io?api=true&month=${month}&day=${day}&key=`
         );
         const data = await response.json();
-        console.log(JSON.stringify(data, null, 2));
         res.json(data);
     }catch(err){
         res.status(500).json({error: err.message});
