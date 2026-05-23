@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-require('dotenv').config({path: '../.env'});
 const APIKljuc = process.env.GROQ_API_KEY;
 app.use((req, res, next) =>{
     res.header("Access-Control-Allow-Origin", "*");
@@ -34,4 +33,4 @@ Do not make up events.(Date format is dd-mm-yyyy)(behave like a bot don't give a
     }
 }
 
-app.listen(4000, () => console.log('Server started on port 4000'));
+app.listen(process.env.PORT || 4000, () => console.log('Server started on port 4000'));

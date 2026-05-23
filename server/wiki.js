@@ -15,7 +15,7 @@ app.get('/wiki',async (req, res)=>{
         const event = data.events.find(e => e.year === parseInt(year));
         if(!event){
             const aiRes = await fetch(
-                `http://localhost:4000/apiAI?month=${month}&day=${day}&year=${year}`
+                `https://historical-webapp-callai.onrender.com/apiAI?month=${month}&day=${day}&year=${year}`
             );
             const aiData = await aiRes.json();
             res.json({found: true, text: aiData.choices[0].message.content});
@@ -26,4 +26,4 @@ app.get('/wiki',async (req, res)=>{
             res.status(500).json({error: err.message});
         }
     });
-    app.listen(5000, () => console.log('Server started on port 5000'));
+    app.listen(process.env.PORT || 5000, () => console.log('Server started on port 5000'));

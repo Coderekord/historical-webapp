@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 import random
@@ -26,5 +27,5 @@ def random_brojevi():
         'day': day
     })
 if __name__ == '__main__':
-    app.run(debug=False, port=8000)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8000)))
     
