@@ -17,9 +17,12 @@ searchBtn.addEventListener("click", () => {
     const year = parts[0];
     const month = parts[1];
     const day = parts[2];
-
+    if(year>2025){
+        result.innerHTML = `<p>Date is too far in the future</p>`;
+        return;
+    }
     result.innerHTML = `<div class="loading">Loading...</div>`;
-    fetch(`http://localhost:3000/api?month=${month}&day=${day}`)
+    fetch(`https://historical-webapp-server.onrender.com/api?month=${month}&day=${day}`)
         .then(response => response.json())
         .then(data => {
 
@@ -36,8 +39,8 @@ searchBtn.addEventListener("click", () => {
             );
 
             if (filtered.length === 0) {
-                result.innerHTML = `<div class="loading">Loading...</div>`;
-                fetch(`http://localhost:5000/wiki?month=${month}&day=${day}&year=${year}`)
+                result.innerHTML = `<div class="loading">Loading secondary...</div>`;
+                fetch(`https://historical-webapp-1.onrender.com/wiki?month=${month}&day=${day}&year=${year}`)
                 .then(response => response.json())
                 .then(data => {
                     result.innerHTML = `
@@ -52,14 +55,16 @@ searchBtn.addEventListener("click", () => {
                 result.innerHTML = `<p>Greška pri učitavanju</p>`;
             });
             } else {
+            let eventsHtml='';
             filtered.forEach(e => {
-                result.innerHTML += `
+                eventsHtml += `
                     <div class="event">
                         <h3>On ${day}.${month}.${year}:</h3>
                         <p>${e.text}</p>
                     </div>
                 `;
             });
+            result.innerHTML = eventsHtml;
         }
         })
         .catch(err => {
@@ -72,13 +77,13 @@ searchBtn.addEventListener("click", () => {
 randomBtn.addEventListener("click", () => {
     result.innerHTML = "";
     result.innerHTML = `<div class="loading">Loading...</div>`;
-    fetch(`http://localhost:8000/random-brojevi`)
+    fetch(`https://historical-webapp-app.onrender.com/random-brojevi`)
         .then(response=>response.json())
         .then(data => {
             const randomMonth= data.month;
             const randomDay= data.day;
             const randomYear= data.year;
-        return fetch(`http://localhost:3000/api?month=${randomMonth}&day=${randomDay}`)
+        return fetch(`https://historical-webapp-server.onrender.com/api?month=${randomMonth}&day=${randomDay}`)
         .then(response => response.json())
         .then(data => {
 
@@ -92,8 +97,8 @@ randomBtn.addEventListener("click", () => {
             ? filtered [Math.floor(Math.random() * filtered.length)]
             : null;
             if (!randomEvent) {
-                result.innerHTML = `<div class="loading">Loading...</div>`;
-                fetch(`http://localhost:5000/wiki?month=${randomMonth}&day=${randomDay}&year=${randomYear}`)
+                result.innerHTML = `<div class="loading">Loading secondary...</div>`;
+                fetch(`https://historical-webapp-1.onrender.com/wiki?month=${randomMonth}&day=${randomDay}&year=${randomYear}`)
                 .then(response => response.json())
                 .then(data=>
                     result.innerHTML = `
