@@ -22,7 +22,8 @@ async function dobijPodatke(req, res){
                     content: `What significant historical event happened on ${day}.${month}.${year}?
 If you know of any event, describe it briefly and factually.
 If you truly have no information about this specific date, respond only with: "No data found for entered date".
-Do not make up events.(Date format is dd-mm-yyyy)(behave like a bot don't give answers that sound personal)`
+Do not make up events
+Do not say undefined say no data found on that date if you can't find anything.(Date format is dd-mm-yyyy)(behave like a bot don't give answers that sound personal)`
                 }]
             })
         });
